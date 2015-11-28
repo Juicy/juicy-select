@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>juicy-select</title>
+	<meta charset="utf-8" />
+    <script type="text/javascript" src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../polymer/polymer.html" />
+    <link rel="import" href="juicy-select.html" />
+</head>
+<body>
+    <template is="dom-bind" id="root">
+        <h3 class="lead"><code>juicy-select</code> - Polymer select element with multiple option support</h3>
+
+        <div class="horizontal-section">
+            <div>Select countries you have visited:</div>
+            <juicy-select multiple="true" options="{{model.Countries}}" selected-property="Selected" text-property="Name" value-property="Name"></juicy-select>
+            <br />
+            <span>Select your favorite country:</span>
+            <juicy-select caption-text="No favorite country" value="{{model.FavoriteCountry}}" options="{{model.Countries}}" selected-property="Selected$" text-property="Name" value-property="Name"></juicy-select>
+        </div>
+
+        <p>
+            You have visited:
+            <template is="dom-repeat" items="{{model.Countries}}">
+                <template is="dom-if" if="{{item.Selected}}">
+                    <span>{{item.Name}}</span>;
+                </template>
+            </template>
+            <br />
+            Your favorite country is: <span>{{model.FavoriteCountry}}</span>
+        </p>
+    </template>
+    <script>
+        var template = document.querySelector("#root");
+
+        template.model = {
+            Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
+            FavoriteCountry: ""
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿<!--
+`juicy-select element` - Polymer select element with multiple option support.
+@element juicy-select
+version: 0.0.0
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="juicy-select">
+    <template>
+        <style>
+            :host {
+                display: inline-block;
+            }
+        </style>
+        <select id="select" multiple="{{multiple}}" on-change="selectChange"></select>
+    </template>
+    <script>
+        Polymer({
+            is: "juicy-select",
+            properties: {
+                options: { type: Array, value: [], observer: "optionsChanged" },
+                multiple: { type: Boolean, value: false },
+                value: { type: String, notify: true },
+                selectedProperty: { type: String, observer: "optionsChanged" },
+                textProperty: { type: String, observer: "optionsChanged" },
+                valueProperty: { type: String, observer: "optionsChanged" },
+                captionText: { type: String, observer: "optionsChanged" }
+            },
+            attached: function () {
+                setTimeout(function () {
+                    this.generateOptions();
+                    this.isAttached = true;
+
+                    if (this.value != this.$.select.value && !this.multiple) {
+                        this.set("value", this.$.select.value);
+                    }
+                }.bind(this), 10);
+            },
+            optionsChanged: function () {
+                if (this.isAttached) {
+                    this.generateOptions();
+                }
+            },
+            generateOptions: function () {
+                if (!this.options || !this.options.length) {
+                    this.$.select.innerHTML = "";
+                    return;
+                }
+
+                if (!this.multiple && this.captionText) {
+                    this.$.select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                }
+
+                for (var i = 0; i < this.options.length; i++) {
+                    var row = this.options[i];
+                    var opt = document.createElement("option");
+
+                    opt.innerHTML = row[this.textProperty];
+                    opt.value = row[this.valueProperty];
+
+                    if (this.multiple) {
+                        opt.selected = row[this.selectedProperty];
+                    } else {
+                        opt.selected = this.value == opt.value;
+                    }
+
+                    this.$.select.appendChild(opt);
+                }
+            },
+            selectChange: function () {
+                if (this.multiple) {
+                    var options = this.$.select.querySelectorAll("option");
+
+                    for (var i = 0; i < options.length; i++) {
+                        this.set("options." + i + "." + this.selectedProperty, options[i].selected);
+                    }
+                } else {
+                    this.set("value", this.$.select.value);
+                }
+            }
+        });
+    </script>
+</dom-module>
