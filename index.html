@@ -29,13 +29,30 @@
             <br />
             Your favorite country is: <span>{{model.FavoriteCountry}}</span>
         </p>
+
+        <div class="horizontal-section">
+            <div>Lazy loading:</div>
+            <juicy-select caption-text="Empty row" options="{{model.LazyOptions}}" text-property="Name" value-property="Name"></juicy-select>
+            <button type="button" on-click="loadLazyOptions">Load options</button>
+        </div>
     </template>
     <script>
         var template = document.querySelector("#root");
 
         template.model = {
             Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
-            FavoriteCountry: ""
+            FavoriteCountry: "",
+            LazyOptions: []
+        };
+
+        template.loadLazyOptions = function () {
+            var l = template.model.LazyOptions.length;
+
+            for (var i = 0; i < 3; i++) {
+                var n = "Lazy options " + (i + l);
+
+                template.push("model.LazyOptions", { Name: n });
+            }
         };
     </script>
 </body>

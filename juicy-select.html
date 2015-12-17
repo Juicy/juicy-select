@@ -27,6 +27,7 @@ version: 0.0.1
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
+            observers: ["optionsChanged(options.length)"],
             attached: function () {
                 setTimeout(function () {
                     this.generateOptions();
@@ -43,13 +44,14 @@ version: 0.0.1
                 }
             },
             generateOptions: function () {
-                if (!this.options || !this.options.length) {
-                    this.$.select.innerHTML = "";
-                    return;
-                }
-
                 if (!this.multiple && this.captionText) {
                     this.$.select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                } else {
+                    this.$.select.innerHTML = "";
+                }
+
+                if (!this.options || !this.options.length) {
+                    return;
                 }
 
                 for (var i = 0; i < this.options.length; i++) {
