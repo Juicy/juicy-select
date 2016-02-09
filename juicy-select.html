@@ -13,7 +13,7 @@ version: 0.0.1
                 display: inline-block;
             }
         </style>
-        <select id="select" multiple="{{multiple}}" on-change="selectChange"></select>
+        <content></content>
     </template>
     <script>
         Polymer({
@@ -21,20 +21,33 @@ version: 0.0.1
             properties: {
                 options: { type: Array, value: [], observer: "optionsChanged" },
                 multiple: { type: Boolean, value: false },
-                value: { type: String, notify: true },
+                value: { type: String, notify: true, observer: "valueChanged" },
                 selectedProperty: { type: String, observer: "optionsChanged" },
                 textProperty: { type: String, observer: "optionsChanged" },
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
-            observers: ["optionsChanged(options.length)"],
             attached: function () {
+                this.$select = this.querySelector("select");
+
+                if (!this.$select) {
+                    this.$select = document.createElement("select");
+                    this.appendChild(this.$select);
+
+                    if (this.multiple) {
+                        this.$select.setAttribute("multiple", "multiple");
+                    }
+                }
+
+                this.$select.addEventListener("change", this.selectChange.bind(this));
+                this.set("multiple", this.$select.hasAttribute("multiple"));
+
                 setTimeout(function () {
                     this.generateOptions();
                     this.isAttached = true;
 
-                    if (this.value != this.$.select.value && !this.multiple) {
-                        this.set("value", this.$.select.value);
+                    if (this.value != this.$select.value && !this.multiple) {
+                        this.set("value", this.$select.value);
                     }
                 }.bind(this), 10);
             },
@@ -44,14 +57,13 @@ version: 0.0.1
                 }
             },
             generateOptions: function () {
-                if (!this.multiple && this.captionText) {
-                    this.$.select.innerHTML = "<option value=''>" + this.captionText + "</option>";
-                } else {
-                    this.$.select.innerHTML = "";
+                if (!this.options || !this.options.length) {
+                    this.$select.innerHTML = "";
+                    return;
                 }
 
-                if (!this.options || !this.options.length) {
-                    return;
+                if (!this.multiple && this.captionText) {
+                    this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
                 }
 
                 for (var i = 0; i < this.options.length; i++) {
@@ -67,18 +79,23 @@ version: 0.0.1
                         opt.selected = this.value == opt.value;
                     }
 
-                    this.$.select.appendChild(opt);
+                    this.$select.appendChild(opt);
                 }
             },
             selectChange: function () {
                 if (this.multiple) {
-                    var options = this.$.select.querySelectorAll("option");
+                    var options = this.$select.querySelectorAll("option");
 
                     for (var i = 0; i < options.length; i++) {
                         this.set("options." + i + "." + this.selectedProperty, options[i].selected);
                     }
                 } else {
-                    this.set("value", this.$.select.value);
+                    this.set("value", this.$select.value);
+                }
+            },
+            valueChanged: function (newVal, oldVal) {
+                if (this.$select) {
+                    this.$select.value = newVal;
                 }
             }
         });
