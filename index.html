@@ -47,12 +47,15 @@
 
         template.loadLazyOptions = function () {
             var l = template.model.LazyOptions.length;
+            var options = [];
 
             for (var i = 0; i < 3; i++) {
                 var n = "Lazy options " + (i + l);
 
-                template.push("model.LazyOptions", { Name: n });
+                options.push({ Name: n });
             }
+
+            template.set("model.LazyOptions", options);
         };
     </script>
 </body>
