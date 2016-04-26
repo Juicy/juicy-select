@@ -1,7 +1,7 @@
 ﻿<!--
 `juicy-select element` - Polymer select element with multiple option support.
 @element juicy-select
-version: 0.0.2
+version: 0.0.3
 -->
 
 <link rel="import" href="../polymer/polymer.html">
@@ -57,13 +57,11 @@ version: 0.0.2
                 }
             },
             generateOptions: function () {
-                if (!this.options || !this.options.length) {
-                    this.$select.innerHTML = "";
-                    return;
-                }
-
                 if (!this.multiple && this.captionText) {
                     this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                } else if (!this.options || !this.options.length) {
+                    this.$select.innerHTML = "";
+                    return;
                 }
 
                 for (var i = 0; i < this.options.length; i++) {
