@@ -9,6 +9,7 @@ Name                | Type    | Description
 `options`           | Array   | Array of objects to generate select options
 `text-property`     | String  | Name of the object property to take text for the options
 `value-property`    | String  | Name of the object property to take value for the options
+`caption-text`      | String  | Text of an empty option, empty option will not be created if the value is not set
 `value`             | String  | Currently selected value, for single selection only (see the `multiple` property)
 `multiple`          | Boolean | Same as `<select multiple>`
 `selected-property` | String  | Name of the object property to indicate whether it's selected, for multiple selection only (see the `multiple` property)
