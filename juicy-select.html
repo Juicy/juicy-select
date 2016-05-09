@@ -59,10 +59,11 @@ version: 0.0.3
             generateOptions: function () {
                 if (!this.multiple && this.captionText) {
                     this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                } else {
+                    this.$select.innerHTML = "";
                 }
 
                 if (!this.options || !this.options.length) {
-                    this.$select.innerHTML += "";
                     return;
                 }
 
