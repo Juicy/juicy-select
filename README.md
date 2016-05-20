@@ -54,4 +54,4 @@ Name                | Type    | Description
 
 See the [demo](http://juicy.github.io/juicy-select/index.html) for more details.
 
-**Note:** `<juicy-select>` keeps actual `<select>` element in the light DOM. If the `<select>` node is not present withing `<juicy-select>` it will be created.
+**Note:** `<juicy-select>` keeps actual `<select>` element in the light DOM. If the `<select>` node is not present within `<juicy-select>`, it will be created.
