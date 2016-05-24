@@ -17,12 +17,12 @@ Name                | Type    | Description
 **Simple select**
 
 ```html
-<juicy-select 
-    caption-text="No favorite country" 
-    value="{{model.FavoriteCountry}}" 
-    options="{{model.Countries}}" 
-    selected-property="Selected$" 
-    text-property="Name" 
+<juicy-select
+    caption-text="No favorite country"
+    value="{{model.FavoriteCountry}}"
+    options="{{model.Countries}}"
+    selected-property="Selected$"
+    text-property="Name"
     value-property="Name">
 </juicy-select>
 ```
@@ -30,11 +30,11 @@ Name                | Type    | Description
 **Multiple select**
 
 ```html
-<juicy-select 
-    multiple="true" 
-    options="{{model.Countries}}" 
-    selected-property="Selected" 
-    text-property="Name" 
+<juicy-select
+    multiple="true"
+    options="{{model.Countries}}"
+    selected-property="Selected"
+    text-property="Name"
     value-property="Name">
 </juicy-select>
 ```
@@ -42,11 +42,11 @@ Name                | Type    | Description
 **Custom `<select>` node**
 
 ```html
-<juicy-select 
-    caption-text="No favorite country" 
-    value="{{model.FavoriteCountry}}" 
+<juicy-select
+    caption-text="No favorite country"
+    value="{{model.FavoriteCountry}}"
     options="{{model.Countries}}"
-    text-property="Name" 
+    text-property="Name"
     value-property="Name">
     <select class="form-control"></select>
 </juicy-select>
@@ -55,3 +55,7 @@ Name                | Type    | Description
 See the [demo](http://juicy.github.io/juicy-select/index.html) for more details.
 
 **Note:** `<juicy-select>` keeps actual `<select>` element in the light DOM. If the `<select>` node is not present within `<juicy-select>`, it will be created.
+
+## License
+
+MIT
