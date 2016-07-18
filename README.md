@@ -21,7 +21,6 @@ Name                | Type    | Description
     caption-text="No favorite country"
     value="{{model.FavoriteCountry}}"
     options="{{model.Countries}}"
-    selected-property="Selected$"
     text-property="Name"
     value-property="Name">
 </juicy-select>
