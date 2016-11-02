@@ -2,6 +2,22 @@
 
 Simple Polymer select element with `multiple` support.
 
+This element is a workaround for Polymer binding issues.
+
+1. IE11 does not support `<template is="dom-repeat">` element inside `<select>`. Thee [Polymer issue #1735](https://github.com/Polymer/polymer/issues/1735).
+2. The initial value of a `<select>` is being lost when generating options with a `dom-repeat`.
+
+```html
+<select value="{{model.SelectedValue::change}}">
+	<template is="dom-repeat" items="{{model.Options}}">
+		<option value="{{item.Value}}">{{item.Name}}</option>
+	</template>
+</select>
+```
+
+In this case the `value="{{model.SelectedValue::change}}"` binding is executed before options are rendered by the `dom-repeat`.
+The HTML `<select>` element can not contain a value which does not exists in it's options collection. This leads to the loss of the initial value.
+
 ### Properties
 
 Name                | Type    | Description
