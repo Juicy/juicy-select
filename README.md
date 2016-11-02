@@ -4,7 +4,7 @@ Simple Polymer select element with `multiple` support.
 
 This element is a workaround for Polymer binding issues.
 
-1. IE11 does not support `<template is="dom-repeat">` element inside `<select>`. Thee [Polymer issue #1735](https://github.com/Polymer/polymer/issues/1735).
+1. IE11 does not support `<template is="dom-repeat">` element inside `<select>`. See the [Polymer issue #1735](https://github.com/Polymer/polymer/issues/1735).
 2. The initial value of a `<select>` is being lost when generating options with a `dom-repeat`.
 
 ```html
