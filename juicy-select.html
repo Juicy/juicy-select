@@ -51,6 +51,9 @@ version: 0.0.5
                     }
                 }.bind(this), 10);
             },
+            connectedCallback : function() {
+                this.attached();
+            },
             optionsChanged: function () {
                 if (this.isAttached) {
                     this.generateOptions();
