@@ -47,9 +47,9 @@ Or [download as ZIP](https://github.com/Juicy/juicy-select/archive/master.zip).
     ```
 
 3. Start using it!
-    
+
     **Simple select**
-    
+
     ```html
     <juicy-select
         caption-text="No favorite country"
@@ -59,9 +59,9 @@ Or [download as ZIP](https://github.com/Juicy/juicy-select/archive/master.zip).
         value-property="Name">
     </juicy-select>
     ```
-    
+
     **Multiple select**
-    
+
     ```html
     <juicy-select
         multiple="true"
@@ -71,9 +71,9 @@ Or [download as ZIP](https://github.com/Juicy/juicy-select/archive/master.zip).
         value-property="Name">
     </juicy-select>
     ```
-    
+
     **Custom `<select>` node**
-    
+
     ```html
     <juicy-select
         caption-text="No favorite country"
@@ -102,6 +102,7 @@ Name                | Type    | Description
 
 - `<juicy-select>` is a [hybrid element](https://www.polymer-project.org/2.0/docs/devguide/hybrid-elements).
 
+## [Contributing and Development](CONTRIBUTING.md)
 
 ## History
 
