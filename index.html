@@ -3,60 +3,70 @@
 <head>
     <title>juicy-select</title>
 	<meta charset="utf-8" />
-    <script type="text/javascript" src="../webcomponentsjs/webcomponents.js"></script>
+    <script type="text/javascript" src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../polymer/polymer.html" />
     <link rel="import" href="juicy-select.html" />
 </head>
 <body>
-    <template is="dom-bind" id="root">
-        <h3 class="lead"><code>juicy-select</code> - Polymer select element with multiple option support</h3>
+    <dom-bind>
+        <template is="dom-bind" id="root">
+            <h3 class="lead"><code>juicy-select</code> - Polymer select element with multiple option support</h3>
 
-        <div class="horizontal-section">
-            <div>Select countries you have visited:</div>
-            <juicy-select multiple="true" options="{{model.Countries}}" selected-property="Selected" text-property="Name" value-property="Name"></juicy-select>
-            <br />
-            <span>Select your favorite country:</span>
-            <juicy-select caption-text="No favorite country" value="{{model.FavoriteCountry}}" options="{{model.Countries}}" selected-property="Selected$" text-property="Name" value-property="Name"></juicy-select>
-        </div>
+            <div class="horizontal-section">
+                <div>Select countries you have visited:</div>
+                <juicy-select multiple="true" options="{{model.Countries}}" selected-property="Selected" text-property="Name" value-property="Name"></juicy-select>
+                <br />
+                <span>Select your favorite country:</span>
+                <juicy-select caption-text="No favorite country" value="{{model.FavoriteCountry}}" options="{{model.Countries}}" selected-property="Selected$" text-property="Name" value-property="Name"></juicy-select>
+            </div>
 
-        <p>
-            You have visited:
-            <template is="dom-repeat" items="{{model.Countries}}">
-                <template is="dom-if" if="{{item.Selected}}">
-                    <span>{{item.Name}}</span>;
-                </template>
-            </template>
-            <br />
-            Your favorite country is: <span>{{model.FavoriteCountry}}</span>
-        </p>
+            <p>
+                You have visited:
+                <dom-repeat>
+                    <template is="dom-repeat" items="{{model.Countries}}">
+                        <dom-if>
+                            <template is="dom-if" if="{{item.Selected}}">
+                                <span>{{item.Name}}</span>;
+                            </template>
+                        <dom-if>
+                    </template>
+                </dom-repeat>
+                <br />
+                Your favorite country is: <span>{{model.FavoriteCountry}}</span>
+            </p>
 
-        <div class="horizontal-section">
-            <div>Lazy loading:</div>
-            <juicy-select caption-text="Empty row" options="{{model.LazyOptions}}" text-property="Name" value-property="Name"></juicy-select>
-            <button type="button" on-click="loadLazyOptions">Load options</button>
-        </div>
-    </template>
-    <script>
-        var template = document.querySelector("#root");
-
-        template.model = {
-            Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
-            FavoriteCountry: "",
-            LazyOptions: []
-        };
-
-        template.loadLazyOptions = function () {
-            var l = template.model.LazyOptions.length;
-            var options = [];
-
-            for (var i = 0; i < 3; i++) {
-                var n = "Lazy options " + (i + l);
-
-                options.push({ Name: n });
+            <div class="horizontal-section">
+                <div>Lazy loading:</div>
+                <juicy-select caption-text="Empty row" options="{{model.LazyOptions}}" text-property="Name" value-property="Name"></juicy-select>
+                <button type="button" on-click="loadLazyOptions">Load options</button>
+            </div>
+        </template>
+        <script>
+        
+            var template = document.querySelector('dom-bind');
+            if (!Polymer.Element) {
+                // Polymer v 1.0
+                template  = document.querySelector('#root');
             }
+            
+            template.model = {
+                Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
+                FavoriteCountry: "",
+                LazyOptions: []
+            };
+            template.loadLazyOptions = function () {
+                var l = template.model.LazyOptions.length;
+                var options = [];
 
-            template.set("model.LazyOptions", options);
-        };
-    </script>
+                for (var i = 0; i < 3; i++) {
+                    var n = "Lazy options " + (i + l);
+
+                    options.push({ Name: n });
+                }
+
+                template.set("model.LazyOptions", options);
+            };
+        </script>
+    </dom-bind>
 </body>
 </html>
