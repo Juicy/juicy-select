@@ -42,17 +42,25 @@ version: 1.0.0
                 this.$select.addEventListener("change", this.selectChange.bind(this));
                 this.set("multiple", this.$select.hasAttribute("multiple"));
 
+                this.isAttached = true;
+
                 setTimeout(function () {
+                    if (!this.isAttached)
+                        return;
+
                     this.generateOptions();
-                    this.isAttached = true;
+                    this.isInitialized = true;
 
                     if (this.value != this.$select.value && !this.multiple) {
                         this.set("value", this.$select.value);
                     }
                 }.bind(this), 10);
             },
+            detached: function () {
+                this.isAttached = false;
+            },
             optionsChanged: function () {
-                if (this.isAttached) {
+                if (this.isInitialized) {
                     this.generateOptions();
                 }
             },
