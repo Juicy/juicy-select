@@ -13,6 +13,7 @@ version: 1.0.0
                 display: inline-block;
             }
         </style>
+        <select id="select" multiple="{{multiple}}" on-change="selectChange"></select>
         <slot></slot>
     </template>
     <script>
@@ -27,40 +28,18 @@ version: 1.0.0
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
-            attached: function () {
-                this.$select = this.querySelector("select");
-
-                if (!this.$select) {
-                    this.$select = document.createElement("select");
-                    this.appendChild(this.$select);
-
-                    if (this.multiple) {
-                        this.$select.setAttribute("multiple", "multiple");
-                    }
-                }
-
-                this.$select.addEventListener("change", this.selectChange.bind(this));
-                this.set("multiple", this.$select.hasAttribute("multiple"));
-
-                setTimeout(function () {
-                    this.generateOptions();
-                    this.isAttached = true;
-
-                    if (this.value != this.$select.value && !this.multiple) {
-                        this.set("value", this.$select.value);
-                    }
-                }.bind(this), 10);
-            },
             optionsChanged: function () {
-                if (this.isAttached) {
-                    this.generateOptions();
+                this.generateOptions();
+
+                if (this.value != this.$.select.value && !this.multiple) {
+                    this.set("value", this.$.select.value);
                 }
             },
             generateOptions: function () {
                 if (!this.multiple && this.captionText) {
-                    this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                    this.$.select.innerHTML = "<option value=''>" + this.captionText + "</option>";
                 } else {
-                    this.$select.innerHTML = "";
+                    this.$.select.innerHTML = "";
                 }
 
                 if (!this.options || !this.options.length) {
@@ -80,23 +59,23 @@ version: 1.0.0
                         opt.selected = this.value == opt.value;
                     }
 
-                    this.$select.appendChild(opt);
+                    this.$.select.appendChild(opt);
                 }
             },
             selectChange: function () {
                 if (this.multiple) {
-                    var options = this.$select.querySelectorAll("option");
+                    var options = this.$.select.querySelectorAll("option");
 
                     for (var i = 0; i < options.length; i++) {
                         this.set("options." + i + "." + this.selectedProperty, options[i].selected);
                     }
                 } else {
-                    this.set("value", this.$select.value);
+                    this.set("value", this.$.select.value);
                 }
             },
             valueChanged: function (newVal, oldVal) {
-                if (this.$select) {
-                    this.$select.value = newVal;
+                if (this.$.select) {
+                    this.$.select.value = newVal;
                 }
             }
         });

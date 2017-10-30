@@ -42,7 +42,7 @@
             </div>
         </template>
         <script>
-        
+        window.addEventListener('WebComponentsReady', function(e) {
             var template = document.querySelector('dom-bind');
             if (!Polymer.Element) {
                 // Polymer v 1.0
@@ -66,6 +66,7 @@
 
                 template.set("model.LazyOptions", options);
             };
+        });
         </script>
     </dom-bind>
 </body>
