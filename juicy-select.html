@@ -53,15 +53,15 @@ version: 1.0.0
                 }
             },
             generateOptions: function () {
-                if (!this.options || !this.options.length) {
-                    return;
-                }
-
                 if (!this.multiple && this.captionText) {
                     this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
                 } else {
                     this.$select.innerHTML = "";
-                }             
+                }
+
+                if (!this.options || !this.options.length) {
+                    return;
+                }
 
                 for (var i = 0; i < this.options.length; i++) {
                     var row = this.options[i];
