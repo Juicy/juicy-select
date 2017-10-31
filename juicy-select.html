@@ -13,7 +13,6 @@ version: 1.0.0
                 display: inline-block;
             }
         </style>
-        <select id="select" multiple="{{multiple}}" on-change="selectChange"></select>
         <slot></slot>
     </template>
     <script>
@@ -28,23 +27,41 @@ version: 1.0.0
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
+            created: function () {
+                this.addEventListener("change", this.selectChange.bind(this));
+            },
+            attached: function () {
+                this.$select = this.querySelector("select");
+                if (!this.$select) {
+                    this.$select = document.createElement("select");
+                    this.appendChild(this.$select);
+                    if (this.multiple) {
+                        this.$select.setAttribute("multiple", "multiple");
+                    }
+                }
+                this.set("multiple", this.$select.hasAttribute("multiple"));
+            },
             optionsChanged: function () {
+                if (!this.$select) {
+                    return;
+                }
+
                 this.generateOptions();
 
-                if (this.value != this.$.select.value && !this.multiple) {
-                    this.set("value", this.$.select.value);
+                if (this.value != this.$select.value && !this.multiple) {
+                    this.set("value", this.$select.value);
                 }
             },
             generateOptions: function () {
-                if (!this.multiple && this.captionText) {
-                    this.$.select.innerHTML = "<option value=''>" + this.captionText + "</option>";
-                } else {
-                    this.$.select.innerHTML = "";
-                }
-
                 if (!this.options || !this.options.length) {
                     return;
                 }
+
+                if (!this.multiple && this.captionText) {
+                    this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                } else {
+                    this.$select.innerHTML = "";
+                }             
 
                 for (var i = 0; i < this.options.length; i++) {
                     var row = this.options[i];
@@ -59,23 +76,23 @@ version: 1.0.0
                         opt.selected = this.value == opt.value;
                     }
 
-                    this.$.select.appendChild(opt);
+                    this.$select.appendChild(opt);
                 }
             },
             selectChange: function () {
                 if (this.multiple) {
-                    var options = this.$.select.querySelectorAll("option");
+                    var options = this.$select.querySelectorAll("option");
 
                     for (var i = 0; i < options.length; i++) {
                         this.set("options." + i + "." + this.selectedProperty, options[i].selected);
                     }
                 } else {
-                    this.set("value", this.$.select.value);
+                    this.set("value", this.$select.value);
                 }
             },
             valueChanged: function (newVal, oldVal) {
-                if (this.$.select) {
-                    this.$.select.value = newVal;
+                if (this.$select) {
+                    this.$select.value = newVal;
                 }
             }
         });
