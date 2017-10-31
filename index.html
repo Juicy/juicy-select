@@ -22,15 +22,11 @@
 
             <p>
                 You have visited:
-                <dom-repeat>
-                    <template is="dom-repeat" items="{{model.Countries}}">
-                        <dom-if>
-                            <template is="dom-if" if="{{item.Selected}}">
-                                <span>{{item.Name}}</span>;
-                            </template>
-                        <dom-if>
+                <template is="dom-repeat" items="{{model.Countries}}">
+                    <template is="dom-if" if="{{item.Selected}}">
+                        <span>{{item.Name}}</span>;
                     </template>
-                </dom-repeat>
+                </template>
                 <br />
                 Your favorite country is: <span>{{model.FavoriteCountry}}</span>
             </p>
