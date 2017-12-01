@@ -1,0 +1,132 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../juicy-select.html">
+    <script src="./helpers.js"></script>
+</head>
+
+<body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="juicy-select-fixture">
+        <template>
+            <!-- nest to workaround test-fixture bug -->
+            <div>
+                <dom-bind>
+                    <template>
+                        <juicy-select caption-text="No favorite country" value="{{model.TempValue}}" options="{{model.Countries}}" selected-property="Selected"
+                            text-property="Name" value-property="Name"></juicy-html>
+                    </template>
+                </dom-bind>
+            </div>
+        </template>
+    </test-fixture>
+
+    <script>
+        describe('<juicy-select>', function (done) {
+            var juicySelect, domBind;
+            const model = {
+                Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
+            }
+            beforeEach(function () {
+                domBind = fixture('juicy-select-fixture').querySelector('dom-bind');
+                juicySelect = document.querySelector('juicy-select');
+
+                domBind.set('model', model);
+            });
+            it("Should contain correct number of <option> elements: options.length + 1 (for caption)", function () {
+                expect(juicySelect.$select.childNodes.length).to.equal(juicySelect.options.length + 1);
+            });
+            it("Each <option>.innerHTML should equal model.options[index][text-property]", function () {
+                const childNodes = Object.entries(juicySelect.$select.childNodes);
+
+                for (let [index, option] of childNodes) {
+                    index = ~~index;
+                    if (index < 1) continue; // skip 0 (caption)
+                    expect(option.innerHTML).to.equal(juicySelect.options[index - 1][juicySelect.textProperty])
+                }
+            });
+            it("Each <option>.value should equal model.options[index][value-property]", function () {
+                const childNodes = Object.entries(juicySelect.$select.childNodes);
+                for (let [index, option] of childNodes) {
+                    index = ~~index;
+                    if (index < 1) continue; // skip 0 (caption)
+                    expect(option.value).to.equal(juicySelect.options[index - 1][juicySelect.valueProperty])
+                }
+            });
+            it("Changing <juicy-html> value should change the inner <select> value", function () {
+                juicySelect.set('value', 'India');
+                expect(juicySelect.$select.value).to.equal('India');
+            });
+            it("Changing <juicy-html> value should change the inner <select> selectedIndex", function () {
+                juicySelect.set('value', 'India');
+                expect(juicySelect.$select.selectedIndex).to.equal(3);
+
+                // one more test
+                juicySelect.set('value', 'Sweden');
+                expect(juicySelect.$select.selectedIndex).to.equal(1);
+            });
+            it("Updating model dynamically should affect <option>s", function () {
+                const newModel = JSON.parse(JSON.stringify(model));
+                newModel.Countries.push({ Name: "Lebanon", Selected: false });
+
+                // control-test
+                expect(juicySelect.$select.childNodes.length).to.equal(4);
+
+                // do it
+                domBind.set('model', newModel);
+
+                // real test
+                expect(juicySelect.$select.childNodes.length).to.equal(5);
+            });
+            it("Should update the value when another options is selected", function () {
+
+                juicySelect.$select.selectedIndex = 2;
+                simulateChangeEvent(juicySelect.$select);
+                expect(juicySelect.value).to.equal("China");
+
+                juicySelect.$select.selectedIndex = 3;
+                simulateChangeEvent(juicySelect.$select);
+                expect(juicySelect.value).to.equal("India");
+
+            });
+            it("Shouldn't keep a hold of to outdated value", function (done) {
+                domBind.set("model.TempValue", "Sweden");
+
+                // Trigger change notification on options to fail PR #10.
+                setTimeout(function () {
+                    // We need to run this on the next iteration of the event loop so that Polymer
+                    // has a chance to attach the juicy-select element first.
+                    domBind.set("model.Countries", []);
+                }, 0);
+
+                // Set ShowTemp back to false and remove TempValue from the model.
+                // This could be Palindrom responding to one "Replace" and one "Remove" patch
+                // arriving immediately after the previous one.
+                setTimeout(function () {
+                    // We need to run this on the next iteration of the event loop, or Polymer will detect
+                    // that this is a no-change, and no notification will be fired.
+                    domBind.set("model.ShowTemp", false);
+                }, 0);
+
+                delete domBind.model.TempValue;
+
+                setTimeout(function () {
+                    expect(typeof domBind.model.TempValue).to.equal("undefined")
+                    done()
+                }, 10);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

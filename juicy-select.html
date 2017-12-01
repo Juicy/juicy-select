@@ -28,7 +28,7 @@ version: 1.0.0
                 captionText: { type: String, observer: "optionsChanged" }
             },
             created: function () {
-                this.addEventListener("change", this.selectChange.bind(this));
+                this.selectChange = this.selectChange.bind(this);
             },
             attached: function () {
                 this.$select = this.querySelector("select");
@@ -38,19 +38,24 @@ version: 1.0.0
                     if (this.multiple) {
                         this.$select.setAttribute("multiple", "multiple");
                     }
+                    this.$select.addEventListener('change', this.selectChange);
                 }
-                this.set("multiple", this.$select.hasAttribute("multiple"));
+                else {
+                    this.set("multiple", this.$select.hasAttribute("multiple"));
+                }
+                if (this.options.length && this.$select) {
+                    this.generateOptions();
+                }
+                this.addEventListener("change", this.selectChange);
+            },
+            detached: function () {
+                this.$select.removeEventListener('change', this.selectChange);
             },
             optionsChanged: function () {
                 if (!this.$select) {
                     return;
                 }
-
                 this.generateOptions();
-
-                if (this.value != this.$select.value && !this.multiple) {
-                    this.set("value", this.$select.value);
-                }
             },
             generateOptions: function () {
                 if (!this.multiple && this.captionText) {
@@ -78,8 +83,12 @@ version: 1.0.0
 
                     this.$select.appendChild(opt);
                 }
+                console.log(this.$select.childNodes.length)
             },
             selectChange: function () {
+                if (!this.$select) {
+                    return
+                }
                 if (this.multiple) {
                     var options = this.$select.querySelectorAll("option");
 
