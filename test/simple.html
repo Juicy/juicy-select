@@ -36,36 +36,39 @@
             const model = {
                 Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
             }
+
             beforeEach(function () {
                 domBind = fixture('juicy-select-fixture').querySelector('dom-bind');
                 juicySelect = document.querySelector('juicy-select');
 
                 domBind.set('model', model);
             });
+
             it("Should contain correct number of <option> elements: options.length + 1 (for caption)", function () {
                 expect(juicySelect.$select.childNodes.length).to.equal(juicySelect.options.length + 1);
             });
-            it("Each <option>.innerHTML should equal model.options[index][text-property]", function () {
-                const childNodes = Object.entries(juicySelect.$select.childNodes);
 
-                for (let [index, option] of childNodes) {
-                    index = ~~index;
-                    if (index < 1) continue; // skip 0 (caption)
-                    expect(option.innerHTML).to.equal(juicySelect.options[index - 1][juicySelect.textProperty])
+            it("Each <option>.innerHTML should equal model.options[index][text-property]", function () {
+                const nodes = juicySelect.$select.childNodes;
+                // skip 0 (caption)
+                for (let i = 1; i < nodes.length; i++) {
+                    expect(nodes[i].innerHTML).to.equal(juicySelect.options[i - 1][juicySelect.textProperty])
                 }
             });
+
             it("Each <option>.value should equal model.options[index][value-property]", function () {
-                const childNodes = Object.entries(juicySelect.$select.childNodes);
-                for (let [index, option] of childNodes) {
-                    index = ~~index;
-                    if (index < 1) continue; // skip 0 (caption)
-                    expect(option.value).to.equal(juicySelect.options[index - 1][juicySelect.valueProperty])
+                const nodes = juicySelect.$select.childNodes;
+                // skip 0 (caption)
+                for (let i = 1; i < nodes.length; i++) {
+                    expect(nodes[i].value).to.equal(juicySelect.options[i - 1][juicySelect.valueProperty])
                 }
             });
+
             it("Changing <juicy-html> value should change the inner <select> value", function () {
                 juicySelect.set('value', 'India');
                 expect(juicySelect.$select.value).to.equal('India');
             });
+
             it("Changing <juicy-html> value should change the inner <select> selectedIndex", function () {
                 juicySelect.set('value', 'India');
                 expect(juicySelect.$select.selectedIndex).to.equal(3);
@@ -74,6 +77,7 @@
                 juicySelect.set('value', 'Sweden');
                 expect(juicySelect.$select.selectedIndex).to.equal(1);
             });
+
             it("Updating model dynamically should affect <option>s", function () {
                 const newModel = JSON.parse(JSON.stringify(model));
                 newModel.Countries.push({ Name: "Lebanon", Selected: false });
@@ -87,6 +91,7 @@
                 // real test
                 expect(juicySelect.$select.childNodes.length).to.equal(5);
             });
+
             it("Should update the value when another options is selected", function () {
 
                 juicySelect.$select.selectedIndex = 2;
@@ -98,6 +103,7 @@
                 expect(juicySelect.value).to.equal("India");
 
             });
+
             it("Shouldn't keep a hold of to outdated value", function (done) {
                 domBind.set("model.TempValue", "Sweden");
 

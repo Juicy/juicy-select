@@ -38,7 +38,6 @@ version: 1.0.0
                     if (this.multiple) {
                         this.$select.setAttribute("multiple", "multiple");
                     }
-                    this.$select.addEventListener('change', this.selectChange);
                 }
                 else {
                     this.set("multiple", this.$select.hasAttribute("multiple"));
@@ -83,7 +82,6 @@ version: 1.0.0
 
                     this.$select.appendChild(opt);
                 }
-                console.log(this.$select.childNodes.length)
             },
             selectChange: function () {
                 if (!this.$select) {
