@@ -27,34 +27,34 @@ version: 1.0.0
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
+            created: function () {
+                this.selectChange = this.selectChange.bind(this);
+            },
             attached: function () {
                 this.$select = this.querySelector("select");
-
                 if (!this.$select) {
                     this.$select = document.createElement("select");
                     this.appendChild(this.$select);
-
                     if (this.multiple) {
                         this.$select.setAttribute("multiple", "multiple");
                     }
                 }
-
-                this.$select.addEventListener("change", this.selectChange.bind(this));
-                this.set("multiple", this.$select.hasAttribute("multiple"));
-
-                setTimeout(function () {
-                    this.generateOptions();
-                    this.isAttached = true;
-
-                    if (this.value != this.$select.value && !this.multiple) {
-                        this.set("value", this.$select.value);
-                    }
-                }.bind(this), 10);
-            },
-            optionsChanged: function () {
-                if (this.isAttached) {
+                else {
+                    this.set("multiple", this.$select.hasAttribute("multiple"));
+                }
+                if (this.options.length && this.$select) {
                     this.generateOptions();
                 }
+                this.addEventListener("change", this.selectChange);
+            },
+            detached: function () {
+                this.$select.removeEventListener('change', this.selectChange);
+            },
+            optionsChanged: function () {
+                if (!this.$select) {
+                    return;
+                }
+                this.generateOptions();
             },
             generateOptions: function () {
                 if (!this.multiple && this.captionText) {
@@ -84,6 +84,9 @@ version: 1.0.0
                 }
             },
             selectChange: function () {
+                if (!this.$select) {
+                    return
+                }
                 if (this.multiple) {
                     var options = this.$select.querySelectorAll("option");
 

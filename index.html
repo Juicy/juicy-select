@@ -12,6 +12,8 @@
         <template is="dom-bind" id="root">
             <h3 class="lead"><code>juicy-select</code> - Polymer select element with multiple option support</h3>
 
+            <h4>Simple usage</h4>
+
             <div class="horizontal-section">
                 <div>Select countries you have visited:</div>
                 <juicy-select multiple="true" options="{{model.Countries}}" selected-property="Selected" text-property="Name" value-property="Name"></juicy-select>
@@ -22,27 +24,38 @@
 
             <p>
                 You have visited:
-                <dom-repeat>
-                    <template is="dom-repeat" items="{{model.Countries}}">
-                        <dom-if>
-                            <template is="dom-if" if="{{item.Selected}}">
-                                <span>{{item.Name}}</span>;
-                            </template>
-                        <dom-if>
+                <template is="dom-repeat" items="{{model.Countries}}">
+                    <template is="dom-if" if="{{item.Selected}}">
+                        <span>{{item.Name}}</span>;
                     </template>
-                </dom-repeat>
+                </template>
                 <br />
                 Your favorite country is: <span>{{model.FavoriteCountry}}</span>
             </p>
 
+            <h4>Lazy loading</h4>
+
             <div class="horizontal-section">
-                <div>Lazy loading:</div>
                 <juicy-select caption-text="Empty row" options="{{model.LazyOptions}}" text-property="Name" value-property="Name"></juicy-select>
                 <button type="button" on-click="loadLazyOptions">Load options</button>
             </div>
+
+            <h4>Light DOM select</h4>
+
+            <div class="horizontal-section">
+                <juicy-select caption-text="No favorite country" value="{{model.FavoriteCountry}}" options="{{model.Countries}}" selected-property="Selected$" text-property="Name" value-property="Name">
+                    <select class="my-select"></select>
+                </juicy-select>
+                <style>
+                    .my-select {
+                        color: blue; 
+                        font-family: Verdana, Tahoma, sans-serif;
+                    }
+                </style>
+            </div>
         </template>
         <script>
-        
+        window.addEventListener('WebComponentsReady', function(e) {
             var template = document.querySelector('dom-bind');
             if (!Polymer.Element) {
                 // Polymer v 1.0
@@ -66,6 +79,7 @@
 
                 template.set("model.LazyOptions", options);
             };
+        });
         </script>
     </dom-bind>
 </body>

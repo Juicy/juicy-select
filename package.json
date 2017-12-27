@@ -1,0 +1,25 @@
+{
+  "name": "juicy-select",
+  "version": "1.0.0",
+  "description": "> Simple Polymer select element with `multiple` support.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "wct --skip-plugin sauce"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juicy/juicy-select.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Juicy/juicy-select/issues"
+  },
+  "homepage": "https://github.com/Juicy/juicy-select#readme",
+  "devDependencies": {
+    "web-component-tester": "^6.4.1"
+  }
+}
