@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>juicy-select</title>
+	<meta charset="utf-8" />
+    <script type="text/javascript" src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../polymer/polymer.html" />
+    <link rel="import" href="juicy-select.html" />
+</head>
+<body>
+    <dom-bind>
+        <template>
+            <div class="horizontal-section">
+                <div>Select countries you have visited:</div>
+                <juicy-select multiple="true" options="{{model.Countries}}" selected-property="Selected" text-property="Name" value-property="Name"></juicy-select>
+           </div>          
+        </template>
+        
+    </dom-bind>
+    <script>
+        var template = document.querySelector('dom-bind');
+           
+        template.set('model', {
+            Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
+            FavoriteCountry: "",
+            LazyOptions: []
+        });
+      
+        setTimeout(() => {              
+          template.set('model.Countries', [{ Name: "Poland", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }]);
+        }, 1000);
+      
+       setTimeout(() => { 
+
+         template.model.Countries.push({ Name: "Peru", Selected: false });
+
+         template.notifySplices('model.Countries', [{
+           index: 3,
+           removed: [],
+           addedCount: 1,
+           object: template.model.Countries,
+           type: 'splice'
+         }])
+        }, 2000);      
+        
+      
+      
+    </script>
+</body>
+</html>
