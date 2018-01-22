@@ -1,3 +1,5 @@
+![Vaadin Directory availability](https://img.shields.io/badge/Vaadin%20Directory-available-green.svg?style=flat-square&colorB=00b4f0&link=https://vaadin.com/directory)
+
 # &lt;juicy-select&gt;
 
 > Simple Polymer select element with `multiple` support.
