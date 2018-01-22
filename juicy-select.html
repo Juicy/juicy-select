@@ -19,7 +19,7 @@ version: 1.1.0
         Polymer({
             is: "juicy-select",
             properties: {
-                options: { type: Array, value: [], observer: "optionsChanged" },
+                options: { type: Array, value: [], notify: true },
                 multiple: { type: Boolean, value: false },
                 value: { type: String, notify: true, observer: "valueChanged" },
                 selectedProperty: { type: String, observer: "optionsChanged" },
@@ -27,6 +27,7 @@ version: 1.1.0
                 valueProperty: { type: String, observer: "optionsChanged" },
                 captionText: { type: String, observer: "optionsChanged" }
             },
+            observers: ['optionsChanged(options.*)'],
             created: function () {
                 this.selectChange = this.selectChange.bind(this);
             },
