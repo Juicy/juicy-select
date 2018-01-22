@@ -104,6 +104,23 @@
 
             });
 
+            it("Should update options if options array is updated using dom-bind.set", function () {
+                domBind.set('model.Countries.0', { Name: "Russia", Selected: false });
+                expect(juicySelect.$select.childNodes[1].innerText).to.equal('Russia');
+            });
+
+            it("Should update options if options array is updated then dom-bind.notifyPath was called", function () {
+                model.Countries[0] = { Name: "Côte d’Ivoire", Selected: false };
+                domBind.notifySplices('model.Countries', [{
+                    index: 0,
+                    removed: [],
+                    addedCount: 1,
+                    object: model.Countries,
+                    type: 'splice'
+                }])
+                expect(juicySelect.$select.childNodes[1].innerText).to.equal('Côte d’Ivoire');
+            });
+
             it("Shouldn't keep a hold of to outdated value", function (done) {
                 domBind.set("model.TempValue", "Sweden");
 
