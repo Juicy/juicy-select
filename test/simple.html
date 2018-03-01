@@ -33,6 +33,7 @@
     <script>
         describe('<juicy-select>', function (done) {
             var juicySelect, domBind;
+
             const model = {
                 Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
             }
@@ -43,6 +44,7 @@
 
                 domBind.set('model', model);
             });
+            
 
             it("Should contain correct number of <option> elements: options.length + 1 (for caption)", function () {
                 expect(juicySelect.$select.childNodes.length).to.equal(juicySelect.options.length + 1);
@@ -67,6 +69,15 @@
             it("Changing <juicy-html> value should change the inner <select> value", function () {
                 juicySelect.set('value', 'India');
                 expect(juicySelect.$select.value).to.equal('India');
+            });
+
+
+            it("Changing <juicy-html>'s width should equal the inner select width", function () {
+                expect(juicySelect.offsetWidth).to.equal(juicySelect.$select.offsetWidth);
+
+                juicySelect.style.width = Math.floor(Math.random() * 500) + 'px';
+
+                expect(juicySelect.offsetWidth).to.equal(juicySelect.$select.offsetWidth);
             });
 
             it("Changing <juicy-html> value should change the inner <select> selectedIndex", function () {
