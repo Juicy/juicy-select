@@ -12,6 +12,10 @@ version: 1.1.1
             :host {
                 display: inline-block;
             }
+
+            ::slotted(select) {
+                width: 100%;
+            }
         </style>
         <slot></slot>
     </template>
