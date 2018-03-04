@@ -22,7 +22,7 @@
             <div>
                 <dom-bind>
                     <template>
-                        <juicy-select caption-text="No favorite country" value="{{model.TempValue}}" options="{{model.Countries}}" selected-property="Selected"
+                        <juicy-select caption-text="{{model.textCaption}}" value="{{model.TempValue}}" options="{{model.Countries}}" selected-property="Selected"
                             text-property="Name" value-property="Name"></juicy-html>
                     </template>
                 </dom-bind>
@@ -35,6 +35,7 @@
             var juicySelect, domBind;
 
             const model = {
+                textCaption: "No favorite country",
                 Countries: [{ Name: "Sweden", Selected: false }, { Name: "China", Selected: false }, { Name: "India", Selected: false }],
             }
 
@@ -44,8 +45,29 @@
 
                 domBind.set('model', model);
             });
-            
 
+            context('Should show caption text as the first option in the inner select', function () {
+                it("when there are options", function () {
+                    expect(juicySelect.$select.childNodes[0] && juicySelect.$select.childNodes[0].textContent).to.equal(model.textCaption);
+                });
+                it("when there is no options", function () {
+                    // it should have the default options now from model, this makes the test more robust
+                    expect(juicySelect.$select.childNodes.length).to.equal(model.Countries.length + 1) // 1 is for caption
+
+                    // remove all the options               
+                    const modelWithEmptyOptions = {
+                        textCaption: "No favorite country",
+                        Countries: []
+                    }
+                    domBind.set('model', modelWithEmptyOptions);
+
+                    // inner select should only have one child (the caption)
+                    expect(juicySelect.$select.childNodes.length).to.equal(1);
+
+                    // and this child should have the caption text
+                    expect(juicySelect.$select.childNodes[0] && juicySelect.$select.childNodes[0].textContent).to.equal(model.textCaption);
+                })
+            })
             it("Should contain correct number of <option> elements: options.length + 1 (for caption)", function () {
                 expect(juicySelect.$select.childNodes.length).to.equal(juicySelect.options.length + 1);
             });
