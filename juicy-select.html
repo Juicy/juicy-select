@@ -20,22 +20,28 @@ version: 1.1.3
         <slot></slot>
     </template>
     <script>
-        Polymer({
-            is: "juicy-select",
-            properties: {
-                options: { type: Array, value: [], notify: true },
-                multiple: { type: Boolean, value: false },
-                value: { type: String, notify: true, observer: "valueChanged" },
-                selectedProperty: { type: String, observer: "optionsChanged" },
-                textProperty: { type: String, observer: "optionsChanged" },
-                valueProperty: { type: String, observer: "optionsChanged" },
-                captionText: { type: String, observer: "optionsChanged" }
-            },
-            observers: ['optionsChanged(options.*)'],
-            created: function () {
+        customElements.define('juicy-select', class extends Polymer.Element {
+            static get is() { return  'juicy-select' }
+            static get properties() {
+                return {
+                    options: { type: Array, value: [], notify: true },
+                    multiple: { type: Boolean, value: false },
+                    value: { type: String, notify: true, observer: "valueChanged" },
+                    selectedProperty: { type: String, observer: "optionsChanged" },
+                    textProperty: { type: String, observer: "optionsChanged" },
+                    valueProperty: { type: String, observer: "optionsChanged" },
+                    captionText: { type: String, observer: "optionsChanged" }
+                };
+            }
+            static get observers() {
+                return ['optionsChanged(options.*)'];
+            }
+            constructor() {
+                super();
                 this.selectChange = this.selectChange.bind(this);
-            },
-            attached: function () {
+            }
+            connectedCallback() {
+                super.connectedCallback();
                 this.$select = this.querySelector("select");
                 if (!this.$select) {
                     this.$select = document.createElement("select");
@@ -51,17 +57,18 @@ version: 1.1.3
                     this.generateOptions();
                 }
                 this.addEventListener("change", this.selectChange);
-            },
-            detached: function () {
+            }
+            disconnectedCallback() {
+                super.disconnectedCallback();
                 this.$select.removeEventListener('change', this.selectChange);
-            },
-            optionsChanged: function () {
+            }
+            optionsChanged() {
                 if (!this.$select) {
                     return;
                 }
                 this.generateOptions();
-            },
-            generateOptions: function () {
+            }
+            generateOptions() {
                 if (!this.multiple && this.captionText) {
                     this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
                 } else {
@@ -87,8 +94,8 @@ version: 1.1.3
 
                     this.$select.appendChild(opt);
                 }
-            },
-            selectChange: function () {
+            }
+            selectChange() {
                 if (!this.$select) {
                     return
                 }
@@ -101,8 +108,8 @@ version: 1.1.3
                 } else {
                     this.set("value", this.$select.value);
                 }
-            },
-            valueChanged: function (newVal, oldVal) {
+            }
+            valueChanged(newVal, oldVal) {
                 if (this.$select) {
                     this.$select.value = newVal;
                 }
